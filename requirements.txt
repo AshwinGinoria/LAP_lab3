@@ -1,0 +1,7 @@
+PyQT5
+nltk
+collections
+numpy
+matplotlib
+wordcloud
+pillow
