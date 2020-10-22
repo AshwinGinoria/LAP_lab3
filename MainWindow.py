@@ -50,12 +50,3 @@ class MainWindow(QMainWindow):
         self.textEdit = QTextEdit()
         self.textEdit.setReadOnly(True)
         self.layout.addWidget(self.textEdit, 1, 0, 2, 5)
-
-
-if __name__ == "__main__":
-    import sys
-
-    app = QApplication(sys.argv)
-    ui = MainWindow()
-    ui.show()
-    sys.exit(app.exec_())
