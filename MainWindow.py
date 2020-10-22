@@ -22,11 +22,17 @@ class MainWindow(QMainWindow):
         self.refreshFileButton.setObjectName("refreshFileButton")
         self.refreshFileButton.move(120,10)
 
+        
         self.wid = QWidget(self)
+        
         self.setCentralWidget(self.wid)
         self.layout = QVBoxLayout()
-        self.layout.addWidget(self.filePickerButton)
-        self.layout.addWidget(self.refreshFileButton)
+
+        self.buttonLayout = QHBoxLayout()
+        self.buttonLayout.addWidget(self.filePickerButton)
+        self.buttonLayout.addWidget(self.refreshFileButton)
+        
+        self.layout.addLayout(self.buttonLayout)
         self.wid.setLayout(self.layout)
 
     def refreshFile(self):
