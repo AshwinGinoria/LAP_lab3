@@ -4,49 +4,59 @@ from PyQt5.QtWidgets import *
 
 
 class MainWindow(QMainWindow):
+    # Initializes Window Geometry and Important Variables
     def __init__(self, parent=None):
         super(QMainWindow, self).__init__(parent)
         self.setObjectName("MainWindow")
-        self.setWindowTitle("SG Transport")
-        self.resize(800, 800)
+        self.setWindowTitle("File Processor")
+        self.FilePath = ""
+        self.resize(600, 400)
         self.setupUi()
 
     def setupUi(self):
-        self.filePickerButton = QPushButton("Choose file", self)
-        self.filePickerButton.clicked.connect(self.filePicker)
-        self.filePickerButton.setObjectName("filePickerButton")
-        self.filePickerButton.move(10, 10)
+        self.CentralWidget = QWidget(self)
+        self.setCentralWidget(self.CentralWidget)
 
-        self.refreshFileButton = QPushButton("Refresh File", self)
-        self.refreshFileButton.clicked.connect(self.refreshFile)
-        self.refreshFileButton.setObjectName("refreshFileButton")
-        self.refreshFileButton.move(120, 10)
+        self.CentralLayout = QVBoxLayout()
+        self.CentralWidget.setLayout(self.CentralLayout)
 
-        self.wid = QWidget(self)
+        self.FilePickerButton = QPushButton("&Choose file", self)
+        self.FilePickerButton.clicked.connect(self.FilePicker)
+        self.FilePickerButton.move(10, 10)
 
-        self.setCentralWidget(self.wid)
-        self.layout = QGridLayout()
-        self.layout.addWidget(self.filePickerButton, 0, 0, 1, 1)
-        self.layout.addWidget(self.refreshFileButton, 0, 1, 1, 1)
-        self.wid.setLayout(self.layout)
+        self.RefreshFileButton = QPushButton("&Refresh File", self)
+        self.RefreshFileButton.clicked.connect(self.RefreshFile)
+        self.RefreshFileButton.move(120, 10)
 
-    def refreshFile(self):
-        file = open(self.filePath[0], "r")
-        self.layout.removeWidget(self.textEdit)
-        self.displayText()
-        with file:
-            text = file.read()
-            self.textEdit.setText(text)
+        # Buttons Arranged Horizontally
+        self.ButtonLayout = QHBoxLayout()
+        self.ButtonLayout.addWidget(self.FilePickerButton)
+        self.ButtonLayout.addWidget(self.RefreshFileButton)
 
-    def filePicker(self):
-        self.filePath = QFileDialog.getOpenFileName(self, "Open File")
-        file = open(self.filePath[0], "r")
-        self.displayText()
-        with file:
-            text = file.read()
-            self.textEdit.setText(text)
+        self.FileTextViewBox = QTextEdit()
+        self.FileTextViewBox.setReadOnly(True)
 
-    def displayText(self):
-        self.textEdit = QTextEdit()
-        self.textEdit.setReadOnly(True)
-        self.layout.addWidget(self.textEdit, 1, 0, 2, 5)
+        # Main Vertical Layout
+        self.CentralLayout.addLayout(self.ButtonLayout)
+        self.CentralLayout.addWidget(self.FileTextViewBox)
+
+    # Refreshes Currently open file for any outside changes made to it
+    def RefreshFile(self):
+        with open(self.FilePath[0], "r") as File:
+            text = File.read()
+            self.FileTextViewBox.setText(text)
+
+    # Choose File to perform Operations on
+    def FilePicker(self):
+        OldFilePath = self.FilePath
+        self.FilePath = QFileDialog.getOpenFileName(self, "Open File")
+
+        # Reverts Changes if No file is Selected or Operation is Cancelled
+        if self.FilePath[0] == "":
+            self.FilePath = OldFilePath
+            return
+
+        # Updates FileTextViewBox with new text
+        with open(self.FilePath[0], "r") as File:
+            text = File.read()
+            self.FileTextViewBox.setText(text)
