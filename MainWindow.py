@@ -2,6 +2,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
 
+
 class MainWindow(QMainWindow):
     def __init__(self, parent=None):
         super(QMainWindow, self).__init__(parent)
@@ -15,7 +16,7 @@ class MainWindow(QMainWindow):
         self.filePickerButton.clicked.connect(self.filePicker)
         self.filePickerButton.setObjectName("filePickerButton")
         self.filePickerButton.move(10, 10)
-        
+
         self.refreshFileButton = QPushButton("Refresh File", self)
         self.refreshFileButton.clicked.connect(self.refreshFile)
         self.refreshFileButton.setObjectName("refreshFileButton")
