@@ -11,49 +11,46 @@ class MainWindow(QMainWindow):
         self.setupUi()
 
     def setupUi(self):
-        self.filePickerButton = QPushButton("Choose file",self)
+        self.filePickerButton = QPushButton("Choose file", self)
         self.filePickerButton.clicked.connect(self.filePicker)
         self.filePickerButton.setObjectName("filePickerButton")
-        self.filePickerButton.move(10,10)
-
-
-        self.refreshFileButton = QPushButton("Refresh File",self)
+        self.filePickerButton.move(10, 10)
+        
+        self.refreshFileButton = QPushButton("Refresh File", self)
         self.refreshFileButton.clicked.connect(self.refreshFile)
         self.refreshFileButton.setObjectName("refreshFileButton")
-        self.refreshFileButton.move(120,10)
+        self.refreshFileButton.move(120, 10)
 
-        
         self.wid = QWidget(self)
-        
-        self.setCentralWidget(self.wid)
-        self.layout = QVBoxLayout()
 
-        self.buttonLayout = QHBoxLayout()
-        self.buttonLayout.addWidget(self.filePickerButton)
-        self.buttonLayout.addWidget(self.refreshFileButton)
-        
-        self.layout.addLayout(self.buttonLayout)
+        self.setCentralWidget(self.wid)
+        self.layout = QGridLayout()
+        self.layout.addWidget(self.filePickerButton, 0, 0, 1, 1)
+        self.layout.addWidget(self.refreshFileButton, 0, 1, 1, 1)
         self.wid.setLayout(self.layout)
 
     def refreshFile(self):
-        file = open(self.filePath[0],'r')
+        file = open(self.filePath[0], "r")
         self.layout.removeWidget(self.textEdit)
         self.displayText()
         with file:
             text = file.read()
             self.textEdit.setText(text)
-    
+
     def filePicker(self):
-        self.filePath = QFileDialog.getOpenFileName(self, 'Open File')
-        file = open(self.filePath[0],'r')
+        self.filePath = QFileDialog.getOpenFileName(self, "Open File")
+        file = open(self.filePath[0], "r")
         self.displayText()
         with file:
             text = file.read()
             self.textEdit.setText(text)
+
     def displayText(self):
         self.textEdit = QTextEdit()
         self.textEdit.setReadOnly(True)
-        self.layout.addWidget(self.textEdit)
+        self.layout.addWidget(self.textEdit, 1, 0, 2, 5)
+
+
 if __name__ == "__main__":
     import sys
 
