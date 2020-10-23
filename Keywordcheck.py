@@ -1,11 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Oct 22 19:38:38 2020
-
-@author: Pratik Kumar
-"""
-
-
 class check_keys:
     def check_keywords(path_file, path_keywords):
         list_path_keywords = []
