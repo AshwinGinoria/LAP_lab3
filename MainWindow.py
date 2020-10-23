@@ -1,7 +1,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from helpers import CountWords, PlotWordHistogram
+from helpers import CountWords, PlotWordHistogram, check_keywords
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from PIL import Image
 import matplotlib.pyplot as plt
@@ -43,12 +43,12 @@ class MainWindow(QMainWindow):
         # Extra Feature Buttons
         self.DisplayDetailsButton = QPushButton("&Show Text Details")
         self.DisplayDetailsButton.clicked.connect(self.DisplayTextDetails)
-        
+
         self.PlotWordHistogramButton = QPushButton("&Display Word Frequencies")
         self.PlotWordHistogramButton.clicked.connect(self.DisplayWordHistogram)
 
         self.KeywordCheckButton = QPushButton("Check &Keywords")
-        # self.KeywordCheckButton.clicked.connect(self.CheckKeywords)
+        self.KeywordCheckButton.clicked.connect(self.CheckKeywords)
 
         self.CreateWordCloudButton = QPushButton("Create &WordCloud")
         self.CreateWordCloudButton.clicked.connect(self.CreateWordCloud)
@@ -90,19 +90,26 @@ class MainWindow(QMainWindow):
         counts = CountWords(self.FileTextViewBox.toPlainText())
 
         Details = {
-            'Total Words' : sum([len(sentence.split(' ')) for sentence in self.FileTextViewBox.toPlainText().strip().split('\n')]),
-            'Total Words Under Consideration' : sum(counts.values()),
-            'Total Different Words' : len(list(counts)),
-            'Most Frequently occuring Word' : counts.most_common()[0],
-            'Least Frequently occuring Word' : counts.most_common()[-1]
+            "Total Words": sum(
+                [
+                    len(sentence.split(" "))
+                    for sentence in self.FileTextViewBox.toPlainText()
+                    .strip()
+                    .split("\n")
+                ]
+            ),
+            "Total Words Under Consideration": sum(counts.values()),
+            "Total Different Words": len(list(counts)),
+            "Most Frequently occuring Word": counts.most_common()[0],
+            "Least Frequently occuring Word": counts.most_common()[-1],
         }
 
         dlg = QDialog(self)
         dlg.setWindowTitle("Text Details")
-        dlg.setFixedSize(400, 200)
-        
+        # dlg.setFixedSize(400, 200)
+
         dlgLayout = QGridLayout(dlg)
-        
+
         c = 0
         for key, val in Details.items():
             dlgLayout.addWidget(QLabel(key), c, 0, 1, 1)
@@ -117,8 +124,8 @@ class MainWindow(QMainWindow):
     def CreateWordCloud(self):
         counts = CountWords(self.FileTextViewBox.toPlainText())
 
-        cloud = WordCloud(background_color='white').fit_words(counts)
-        plt.imshow(cloud, interpolation='bilinear')
+        cloud = WordCloud(background_color="white").fit_words(counts)
+        plt.imshow(cloud, interpolation="bilinear")
         plt.axis("off")
         plt.show()
 
@@ -126,3 +133,29 @@ class MainWindow(QMainWindow):
         plot = PlotWordHistogram(self.FileTextViewBox.toPlainText())
 
         plt.show()
+
+    def CheckKeywords(self):
+        KeyWordFilePath = QFileDialog.getOpenFileName(self, "Open Keyword File")
+
+        with open(KeyWordFilePath[0], "r") as File:
+            text = File.read().split("\n")
+            result = check_keywords(
+                self.FileTextViewBox.toPlainText().split("\n"), text
+            )
+            res = ""
+            for sentence in result.values():
+                res += sentence + "\n"
+
+            dlg = QDialog(self)
+            dlg.setWindowTitle("KeyWord Occurances in the Following Sentences")
+
+            dlgText = QTextEdit(dlg)
+            dlgText.setText(res)
+            dlgText.setReadOnly(True)
+
+            dlgLayout = QVBoxLayout(self)
+            dlgLayout.addWidget(dlgText)
+            dlg.setLayout(dlgLayout)
+
+            if dlg.exec_():
+                pass
