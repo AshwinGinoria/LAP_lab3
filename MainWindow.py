@@ -90,7 +90,7 @@ class MainWindow(QMainWindow):
         counts = CountWords(self.FileTextViewBox.toPlainText())
 
         Details = {
-            'Total Words' : sum([len(sentence.strip().split()) for sentence in self.FileTextViewBox.toPlainText()]),
+            'Total Words' : sum([len(sentence.split(' ')) for sentence in self.FileTextViewBox.toPlainText().strip().split('\n')]),
             'Total Words Under Consideration' : sum(counts.values()),
             'Total Different Words' : len(list(counts)),
             'Most Frequently occuring Word' : counts.most_common()[0],
