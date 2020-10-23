@@ -1,7 +1,7 @@
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtWidgets import *
-from process import CountWords, PlotWordHistogram
+from helpers import CountWords, PlotWordHistogram
 from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
 from PIL import Image
 import matplotlib.pyplot as plt
