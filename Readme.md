@@ -13,7 +13,7 @@ The file processor is built upon nltk,numpy and collections and offers some cool
 
 ## About us
 Meet our team 
-* Vivek Kumar(
+* Vivek Kumar(B18092)
 * Ashwin Ginoria(B18048)
 * Saransh Jain(B18191)
 * Saksham Barara(B18190)
